@@ -15,7 +15,7 @@
 
 package Clownfish::Vector;
 use Clownfish;
-our $VERSION = '0.006004_03';
+our $VERSION = '0.006004';
 $VERSION = eval $VERSION;
 
 1;
