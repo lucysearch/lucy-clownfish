@@ -8763,7 +8763,7 @@ typedef struct cfish_MakeFile {
     char        *autogen_target;
 } cfish_MakeFile;
 
-static const char cfish_version[]       = "0.6.3";
+static const char cfish_version[]       = "0.6.4";
 static const char cfish_major_version[] = "0.6";
 
 static void
