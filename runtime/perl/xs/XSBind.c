@@ -1193,7 +1193,7 @@ cfish_TestUtils_clone_host_runtime() {
 
 void
 cfish_TestUtils_set_host_runtime(void *runtime) {
-    PERL_SET_CONTEXT(runtime);
+    PERL_SET_CONTEXT((PerlInterpreter*)runtime);
 }
 
 void
