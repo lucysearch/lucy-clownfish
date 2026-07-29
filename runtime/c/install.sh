@@ -17,7 +17,7 @@
 
 set -e
 
-version=0.6.4
+version=0.6.5
 major_version=0.6
 
 usage()
