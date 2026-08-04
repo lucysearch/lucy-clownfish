@@ -40,6 +40,9 @@ pm_to_blib
 # Apple window status files
 \.DS_Store
 
+# compiled lemon binary (only lemon.c ships)
+lemon/lemon$
+
 # vim swap files
 \.swp$
 

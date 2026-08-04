@@ -15,7 +15,7 @@
 
 package Clownfish::Obj;
 use Clownfish;
-our $VERSION = '0.006005';
+our $VERSION = '0.006005_004';
 $VERSION = eval $VERSION;
 
 1;
