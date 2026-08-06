@@ -683,10 +683,10 @@ the Perl bindings for Clownfish modules.
             'Other::Module' => '0.3.0',
         },
         configure_requires => {
-            'Clownfish::CFC::Perl::Build' => 0.006005_004,
+            'Clownfish::CFC::Perl::Build' => 0.006005_005,
         },
         build_requires => {
-            'Clownfish::CFC::Perl::Build' => 0.006005_004,
+            'Clownfish::CFC::Perl::Build' => 0.006005_005,
         },
     );
 
