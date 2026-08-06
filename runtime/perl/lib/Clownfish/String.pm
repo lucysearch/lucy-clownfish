@@ -15,7 +15,7 @@
 
 package Clownfish::String;
 use Clownfish;
-our $VERSION = '0.006005_004';
+our $VERSION = '0.006005_005';
 $VERSION = eval $VERSION;
 
 1;

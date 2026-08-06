@@ -187,6 +187,7 @@ sub update_pm_file {
     my $name = $_;
     return if $name eq 'Clownfish.pm';
     return if $name eq 'CFC.pm';
+    return if $name eq 'Charmony.pm';
     my $buf = read_file($name);
     $buf =~ s/(our \$VERSION\ +=\ +)'.+?'/$1'$x_yyyzzz_version'/g
         or die "no match in $File::Find::name";
@@ -205,7 +206,7 @@ sub read_file {
 
 sub write_file {
     my ( $file, $buf ) = @_;
-    open( F, "> $file" ) or die "Cannot write $file: $!\n";
+    open( F, "> $file" ) or die "Cannot write ($File::Find::name) $file: $!\n";
     print F $buf;
     close(F) or die "Cannot close $file: $!\n";
 }
