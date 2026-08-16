@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-/* Package cfc provides a compiler for Apache Clownfish.
+/* Package cfc provides a compiler for Clownfish.
  */
 package cfc
 
