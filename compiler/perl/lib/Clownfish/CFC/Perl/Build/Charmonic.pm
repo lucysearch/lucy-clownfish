@@ -117,6 +117,9 @@ sub ACTION_charmony {
         '--', $self->config('ccflags'),
         '-I' . File::Spec->catdir($self->config('archlibexp'), 'CORE'),
     );
+    if ( $ENV{CFISH_EXTRA_CFLAGS} ) {
+        push @command, $self->split_like_shell( $ENV{CFISH_EXTRA_CFLAGS} );
+    }
     if ( $ENV{CHARM_VALGRIND} ) {
         unshift @command, "valgrind", "--leak-check=yes";
     }
