@@ -1,4 +1,4 @@
-# Writing Apache Clownfish classes
+# Writing Clownfish classes
 
 ## Parcels
 

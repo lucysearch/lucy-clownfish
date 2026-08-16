@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-/* Build "script" for cfc (Apache Clownfish compiler).
+/* Build "script" for cfc (Clownfish compiler).
  */
 package main
 

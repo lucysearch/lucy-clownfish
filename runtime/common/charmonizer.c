@@ -9351,7 +9351,7 @@ cfish_MakeFile_write_c_install_rules(cfish_MakeFile *self) {
     chaz_MakeFile_install_pkgconfig(self->makefile, "clownfish", cfish_version,
         "Name: Clownfish\n"
         "Description: Symbiotic object system\n"
-        "URL: http://lucy.apache.org/\n"
+        "URL: https://github.com/lucysearch/lucy-clownfish\n"
         "Version: $${version}\n"
         "Libs: -L$${libdir} -lclownfish\n"
     );

@@ -870,7 +870,7 @@ Clownfish::CFC - Clownfish compiler.
 
 =head1 PRIVATE API
 
-CFC is an Apache Lucy implementation detail.  This documentation is partial --
+CFC is an Lucy implementation detail.  This documentation is partial --
 enough for the curious hacker, but not a full API.
 
 =head1 SYNOPSIS
