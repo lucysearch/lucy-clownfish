@@ -16,7 +16,7 @@ package Clownfish::Build::Binding;
 use strict;
 use warnings;
 
-our $VERSION = '0.006005_005';
+our $VERSION = '0.007000_001';
 $VERSION = eval $VERSION;
 
 sub bind_all {

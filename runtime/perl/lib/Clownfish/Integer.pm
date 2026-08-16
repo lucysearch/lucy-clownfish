@@ -15,7 +15,7 @@
 
 package Clownfish::Integer;
 use Clownfish;
-our $VERSION = '0.006005_005';
+our $VERSION = '0.007000_001';
 $VERSION = eval $VERSION;
 
 1;
