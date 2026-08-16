@@ -46,11 +46,13 @@ CFCCallable_init(CFCCallable *self, const char *exposure, const char *name,
 }
 
 void
-CFCCallable_destroy(CFCCallable *self) {
+CFCCallable_destroy(CFCBase *base) {
+    CFCCallable *self = (CFCCallable *) base;
+
     CFCBase_decref((CFCBase*)self->return_type);
     CFCBase_decref((CFCBase*)self->param_list);
     CFCBase_decref((CFCBase*)self->docucomment);
-    CFCSymbol_destroy((CFCSymbol*)self);
+    CFCSymbol_destroy(base);
 }
 
 void

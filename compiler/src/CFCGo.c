@@ -38,7 +38,7 @@
 #endif
 
 static void
-S_CFCGo_destroy(CFCGo *self);
+S_CFCGo_destroy(CFCBase *base);
 
 struct mapping {
     char *parcel;
@@ -61,7 +61,7 @@ struct CFCGo {
 static const CFCMeta CFCGO_META = {
     "Clownfish::CFC::Binding::Go",
     sizeof(CFCGo),
-    (CFCBase_destroy_t)S_CFCGo_destroy
+    S_CFCGo_destroy
 };
 
 CFCGo*
@@ -78,13 +78,15 @@ CFCGo_new(CFCHierarchy *hierarchy) {
 }
 
 static void
-S_CFCGo_destroy(CFCGo *self) {
+S_CFCGo_destroy(CFCBase *base) {
+    CFCGo *self = (CFCGo *) base;
+
     CFCBase_decref((CFCBase*)self->hierarchy);
     FREEMEM(self->header);
     FREEMEM(self->footer);
     FREEMEM(self->c_header);
     FREEMEM(self->c_footer);
-    CFCBase_destroy((CFCBase*)self);
+    CFCBase_destroy(base);
 }
 
 void

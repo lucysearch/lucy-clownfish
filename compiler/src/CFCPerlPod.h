@@ -35,9 +35,6 @@ CFCPerlPod_new(void);
 CFCPerlPod*
 CFCPerlPod_init(CFCPerlPod *self);
 
-void
-CFCPerlPod_destroy(CFCPerlPod *self);
-
 /** Add pod for a method.
  * 
  * @param alias The name of the method, spelled as it will be used from

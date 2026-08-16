@@ -84,10 +84,13 @@ S_bequeath_member_vars(CFCClass *self);
 static void
 S_bequeath_methods(CFCClass *self);
 
+static void
+CFCClass_destroy(CFCBase *base);
+
 static const CFCMeta CFCCLASS_META = {
     "Clownfish::CFC::Model::Class",
     sizeof(CFCClass),
-    (CFCBase_destroy_t)CFCClass_destroy
+    CFCClass_destroy
 };
 
 CFCClass*
@@ -308,8 +311,10 @@ S_free_cfcbase_array(CFCBase **array) {
     }
 }
 
-void
-CFCClass_destroy(CFCClass *self) {
+static void
+CFCClass_destroy(CFCBase *base) {
+    CFCClass *self = (CFCClass *) base;
+
     CFCWeakPtr_destroy(&self->parcel);
     FREEMEM(self->exposure);
     FREEMEM(self->name);
@@ -336,7 +341,7 @@ CFCClass_destroy(CFCClass *self) {
     FREEMEM(self->full_class_var);
     FREEMEM(self->privacy_symbol);
     FREEMEM(self->include_h);
-    CFCBase_destroy((CFCBase*)self);
+    CFCBase_destroy(base);
 }
 
 void

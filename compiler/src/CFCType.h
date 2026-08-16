@@ -183,9 +183,6 @@ CFCType_new_arbitrary(struct CFCParcel *parcel, const char *specifier);
 void
 CFCType_resolve(CFCType *self);
 
-void
-CFCType_destroy(CFCType *self);
-
 /** Returns true if two Clownfish::CFC::Model::Type objects are equivalent.
  */
 int

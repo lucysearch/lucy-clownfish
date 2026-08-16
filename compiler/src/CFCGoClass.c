@@ -54,7 +54,7 @@ static size_t registry_size = 0;
 static size_t registry_cap  = 0;
 
 static void
-S_CFCGoClass_destroy(CFCGoClass *self);
+S_CFCGoClass_destroy(CFCBase *base);
 
 static void
 S_lazy_init_method_bindings(CFCGoClass *self);
@@ -62,7 +62,7 @@ S_lazy_init_method_bindings(CFCGoClass *self);
 static const CFCMeta CFCGOCLASS_META = {
     "Clownfish::CFC::Binding::Go::Class",
     sizeof(CFCGoClass),
-    (CFCBase_destroy_t)S_CFCGoClass_destroy
+    S_CFCGoClass_destroy
 };
 
 CFCGoClass*
@@ -79,7 +79,9 @@ CFCGoClass_new(CFCParcel *parcel, const char *class_name) {
 }
 
 static void
-S_CFCGoClass_destroy(CFCGoClass *self) {
+S_CFCGoClass_destroy(CFCBase *base) {
+    CFCGoClass *self = (CFCGoClass *) base;
+
     CFCBase_decref((CFCBase*)self->parcel);
     CFCBase_decref((CFCBase*)self->client);
     FREEMEM(self->class_name);
@@ -87,7 +89,7 @@ S_CFCGoClass_destroy(CFCGoClass *self) {
         CFCBase_decref((CFCBase*)self->method_bindings[i]);
     }
     FREEMEM(self->method_bindings);
-    CFCBase_destroy((CFCBase*)self);
+    CFCBase_destroy(base);
 }
 
 static int

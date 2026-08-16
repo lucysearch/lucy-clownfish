@@ -42,10 +42,13 @@ struct CFCC {
     char         *man_footer;
 };
 
+static void
+CFCC_destroy(CFCBase *base);
+
 static const CFCMeta CFCC_META = {
     "Clownfish::CFC::Binding::C",
     sizeof(CFCC),
-    (CFCBase_destroy_t)CFCC_destroy
+    CFCC_destroy
 };
 
 CFCC*
@@ -69,15 +72,17 @@ CFCC_init(CFCC *self, CFCHierarchy *hierarchy, const char *header,
     return self;
 }
 
-void
-CFCC_destroy(CFCC *self) {
+static void
+CFCC_destroy(CFCBase *base) {
+    CFCC *self = (CFCC *) base;
+
     CFCBase_decref((CFCBase*)self->hierarchy);
     CFCBase_decref((CFCBase*)self->html_gen);
     FREEMEM(self->c_header);
     FREEMEM(self->c_footer);
     FREEMEM(self->man_header);
     FREEMEM(self->man_footer);
-    CFCBase_destroy((CFCBase*)self);
+    CFCBase_destroy(base);
 }
 
 void

@@ -50,10 +50,13 @@ S_fresh_class(CFCMethod *self);
 static const char*
 S_fresh_class_name(CFCMethod *self);
 
+static void
+CFCMethod_destroy(CFCBase *base);
+
 static const CFCMeta CFCMETHOD_META = {
     "Clownfish::CFC::Model::Method",
     sizeof(CFCMethod),
-    (CFCBase_destroy_t)CFCMethod_destroy
+    CFCMethod_destroy
 };
 
 CFCMethod*
@@ -137,12 +140,14 @@ CFCMethod_resolve_types(CFCMethod *self) {
     CFCCallable_resolve_types((CFCCallable*)self);
 }
 
-void
-CFCMethod_destroy(CFCMethod *self) {
+static void
+CFCMethod_destroy(CFCBase *base) {
+    CFCMethod *self = (CFCMethod *) base;
+
     CFCBase_decref((CFCBase*)self->novel_method);
     CFCWeakPtr_destroy(&self->fresh_class);
     FREEMEM(self->host_alias);
-    CFCCallable_destroy((CFCCallable*)self);
+    CFCCallable_destroy(base);
 }
 
 int

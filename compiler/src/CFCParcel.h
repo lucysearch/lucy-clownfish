@@ -79,9 +79,6 @@ CFCParcel_init(CFCParcel *self, const char *name, const char *nickname,
                struct CFCVersion *version, struct CFCVersion *major_version,
                struct CFCFileSpec *file_spec);
 
-void
-CFCParcel_destroy(CFCParcel *self);
-
 int
 CFCParcel_equals(CFCParcel *self, CFCParcel *other);
 
@@ -212,9 +209,6 @@ CFCPrereq_new(const char *name, struct CFCVersion *version);
 
 CFCPrereq*
 CFCPrereq_init(CFCPrereq *self, const char *name, struct CFCVersion *version);
-
-void
-CFCPrereq_destroy(CFCPrereq *self);
 
 const char*
 CFCPrereq_get_name(CFCPrereq *self);

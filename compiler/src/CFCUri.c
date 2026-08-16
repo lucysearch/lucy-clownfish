@@ -38,10 +38,13 @@ struct CFCUri {
     char        *error;
 };
 
+static void
+CFCUri_destroy(CFCBase *base);
+
 static const CFCMeta CFCURI_META = {
     "Clownfish::CFC::Uri",
     sizeof(CFCUri),
-    (CFCBase_destroy_t)CFCUri_destroy
+    CFCUri_destroy
 };
 
 static void
@@ -84,15 +87,17 @@ CFCUri_init(CFCUri *self, const char *uri, CFCClass *base_class) {
     return self;
 }
 
-void
-CFCUri_destroy(CFCUri *self) {
+static void
+CFCUri_destroy(CFCBase *base) {
+    CFCUri *self = (CFCUri *) base;
+
     FREEMEM(self->string);
     FREEMEM(self->callable);
     FREEMEM(self->error);
     CFCBase_decref((CFCBase*)self->base_class);
     CFCBase_decref((CFCBase*)self->klass);
     CFCBase_decref((CFCBase*)self->document);
-    CFCBase_destroy((CFCBase*)self);
+    CFCBase_destroy(base);
 }
 
 static void

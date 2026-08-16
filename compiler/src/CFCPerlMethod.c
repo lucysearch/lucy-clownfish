@@ -86,10 +86,13 @@ static char*
 S_obj_callback_body(CFCMethod *method, const char *callback_start,
                     const char *refcount_mods);
 
+static void
+CFCPerlMethod_destroy(CFCBase *base);
+
 static const CFCMeta CFCPERLMETHOD_META = {
     "Clownfish::CFC::Binding::Perl::Method",
     sizeof(CFCPerlMethod),
-    (CFCBase_destroy_t)CFCPerlMethod_destroy
+    CFCPerlMethod_destroy
 };
 
 CFCPerlMethod*
@@ -114,10 +117,12 @@ CFCPerlMethod_init(CFCPerlMethod *self, CFCClass *klass, CFCMethod *method) {
     return self;
 }
 
-void
-CFCPerlMethod_destroy(CFCPerlMethod *self) {
+static void
+CFCPerlMethod_destroy(CFCBase *base) {
+    CFCPerlMethod *self = (CFCPerlMethod *) base;
+
     CFCBase_decref((CFCBase*)self->method);
-    CFCPerlSub_destroy((CFCPerlSub*)self);
+    CFCPerlSub_destroy(base);
 }
 
 char*

@@ -59,10 +59,13 @@ static void
 S_add_inherited_meth(CFCBindSpecs *self, CFCMethod *method, CFCClass *klass,
                      int meth_index);
 
+static void
+CFCBindSpecs_destroy(CFCBase *base);
+
 static const CFCMeta CFCBINDSPECS_META = {
     "Clownfish::CFC::Binding::Core::Specs",
     sizeof(CFCBindSpecs),
-    (CFCBase_destroy_t)CFCBindSpecs_destroy
+    CFCBindSpecs_destroy
 };
 
 CFCBindSpecs*
@@ -82,14 +85,16 @@ CFCBindSpecs_init(CFCBindSpecs *self) {
     return self;
 }
 
-void
-CFCBindSpecs_destroy(CFCBindSpecs *self) {
+static void
+CFCBindSpecs_destroy(CFCBase *base) {
+    CFCBindSpecs *self = (CFCBindSpecs *) base;
+
     FREEMEM(self->novel_specs);
     FREEMEM(self->overridden_specs);
     FREEMEM(self->inherited_specs);
     FREEMEM(self->class_specs);
     FREEMEM(self->init_code);
-    CFCBase_destroy((CFCBase*)self);
+    CFCBase_destroy(base);
 }
 
 const char*

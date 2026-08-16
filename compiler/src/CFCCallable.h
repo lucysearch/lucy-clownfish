@@ -58,7 +58,7 @@ CFCCallable_init(CFCCallable *self, const char *exposure, const char *name,
                  struct CFCDocuComment *docucomment);
 
 void
-CFCCallable_destroy(CFCCallable *self);
+CFCCallable_destroy(CFCBase *base);
 
 /** Find the actual class of all unprefixed object types.
  */

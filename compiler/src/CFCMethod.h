@@ -67,9 +67,6 @@ CFCMethod_init(CFCMethod *self, const char *exposure, const char *name,
 void
 CFCMethod_resolve_types(CFCMethod *self);
 
-void
-CFCMethod_destroy(CFCMethod *self);
-
 /** Returns true if the methods have signatures and attributes which allow one
  * to override the other.
  */

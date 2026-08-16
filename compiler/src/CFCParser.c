@@ -46,10 +46,13 @@ struct CFCParser {
     CFCParcel  *parcel;
 };
 
+static void
+CFCParser_destroy(CFCBase *base);
+
 static const CFCMeta CFCPARSER_META = {
     "Clownfish::CFC::Parser",
     sizeof(CFCParser),
-    (CFCBase_destroy_t)CFCParser_destroy
+    CFCParser_destroy
 };
 
 CFCParser*
@@ -74,15 +77,17 @@ CFCParser_init(CFCParser *self) {
     return self;
 }
 
-void
-CFCParser_destroy(CFCParser *self) {
+static void
+CFCParser_destroy(CFCBase *base) {
+    CFCParser *self = (CFCParser *) base;
+
     CFCParseHeaderFree(self->header_parser, free);
     CFCBase_decref((CFCBase*)self->klass);
     CFCBase_decref((CFCBase*)self->file_spec);
     CFCBase_decref((CFCBase*)self->pool);
     CFCBase_decref(self->result);
     CFCBase_decref((CFCBase*)self->parcel);
-    CFCBase_destroy((CFCBase*)self);
+    CFCBase_destroy(base);
 }
 
 CFCParser *CFCParser_current_state  = NULL;

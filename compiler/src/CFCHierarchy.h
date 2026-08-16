@@ -44,9 +44,6 @@ CFCHierarchy_new(const char *dest);
 CFCHierarchy*
 CFCHierarchy_init(CFCHierarchy *self, const char *dest);
 
-void
-CFCHierarchy_destroy(CFCHierarchy *self);
-
 /** Add path C<source_dir> to the list of source directories.
  */
 void

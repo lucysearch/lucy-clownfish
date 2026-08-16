@@ -40,12 +40,12 @@ struct CFCPython {
 };
 
 static void
-S_destroy(CFCPython *self);
+S_destroy(CFCBase *base);
 
 static const CFCMeta CFCPYTHON_META = {
     "Clownfish::CFC::Binding::Python",
     sizeof(CFCPython),
-    (CFCBase_destroy_t)S_destroy
+    S_destroy
 };
 
 CFCPython*
@@ -59,11 +59,13 @@ CFCPython_new(CFCHierarchy *hierarchy) {
 }
 
 static void
-S_destroy(CFCPython *self) {
+S_destroy(CFCBase *base) {
+    CFCPython *self = (CFCPython *) base;
+
     CFCBase_decref((CFCBase*)self->hierarchy);
     FREEMEM(self->header);
     FREEMEM(self->footer);
-    CFCBase_destroy((CFCBase*)self);
+    CFCBase_destroy(base);
 }
 
 void

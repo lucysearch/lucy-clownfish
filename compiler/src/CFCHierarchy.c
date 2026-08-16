@@ -102,10 +102,13 @@ S_fetch_file(CFCHierarchy *self, const char *path_part);
 static int
 S_do_propagate_modified(CFCHierarchy *self, CFCClass *klass, int modified);
 
+static void
+CFCHierarchy_destroy(CFCBase *base);
+
 static const CFCMeta CFCHIERARCHY_META = {
     "Clownfish::CFC::Model::Hierarchy",
     sizeof(CFCHierarchy),
-    (CFCBase_destroy_t)CFCHierarchy_destroy
+    CFCHierarchy_destroy
 };
 
 CFCHierarchy*
@@ -138,8 +141,10 @@ CFCHierarchy_init(CFCHierarchy *self, const char *dest) {
     return self;
 }
 
-void
-CFCHierarchy_destroy(CFCHierarchy *self) {
+static void
+CFCHierarchy_destroy(CFCBase *base) {
+    CFCHierarchy *self = (CFCHierarchy *) base;
+
     for (size_t i = 0; self->trees[i] != NULL; i++) {
         CFCBase_decref((CFCBase*)self->trees[i]);
     }
@@ -155,7 +160,7 @@ CFCHierarchy_destroy(CFCHierarchy *self) {
     FREEMEM(self->inc_dest);
     FREEMEM(self->src_dest);
     CFCBase_decref((CFCBase*)self->parser);
-    CFCBase_destroy((CFCBase*)self);
+    CFCBase_destroy(base);
 }
 
 void

@@ -84,9 +84,6 @@ CFCClass_do_create(CFCClass *self, struct CFCParcel *parcel,
                    struct CFCFileSpec *file_spec, const char *parent_class_name,
                    int is_final, int is_inert, int is_abstract);
 
-void
-CFCClass_destroy(CFCClass *self);
-
 /** Add a child class.
  */
 void

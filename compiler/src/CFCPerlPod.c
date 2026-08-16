@@ -59,10 +59,13 @@ struct CFCPerlPod {
     size_t   num_constructors;
 };
 
+static void
+CFCPerlPod_destroy(CFCBase *base);
+
 static const CFCMeta CFCPERLPOD_META = {
     "Clownfish::CFC::Binding::Perl::Pod",
     sizeof(CFCPerlPod),
-    (CFCBase_destroy_t)CFCPerlPod_destroy
+    CFCPerlPod_destroy
 };
 
 static char*
@@ -116,8 +119,10 @@ CFCPerlPod_init(CFCPerlPod *self) {
     return self;
 }
 
-void
-CFCPerlPod_destroy(CFCPerlPod *self) {
+static void
+CFCPerlPod_destroy(CFCBase *base) {
+    CFCPerlPod *self = (CFCPerlPod *) base;
+
     FREEMEM(self->synopsis);
     FREEMEM(self->description);
     for (size_t i = 0; i < self->num_methods; i++) {
@@ -134,7 +139,7 @@ CFCPerlPod_destroy(CFCPerlPod *self) {
         FREEMEM(self->constructors[i].sample);
     }
     FREEMEM(self->constructors);
-    CFCBase_destroy((CFCBase*)self);
+    CFCBase_destroy(base);
 }
 
 void

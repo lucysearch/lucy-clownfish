@@ -57,10 +57,13 @@ static CFCPerlClass **registry = NULL;
 static size_t registry_size = 0;
 static size_t registry_cap  = 0;
 
+static void
+CFCPerlClass_destroy(CFCBase *base);
+
 static const CFCMeta CFCPERLCLASS_META = {
     "Clownfish::CFC::Binding::Perl::Class",
     sizeof(CFCPerlClass),
-    (CFCBase_destroy_t)CFCPerlClass_destroy
+    CFCPerlClass_destroy
 };
 
 CFCPerlClass*
@@ -112,8 +115,10 @@ CFCPerlClass_init(CFCPerlClass *self, CFCParcel *parcel,
     return self;
 }
 
-void
-CFCPerlClass_destroy(CFCPerlClass *self) {
+static void
+CFCPerlClass_destroy(CFCBase *base) {
+    CFCPerlClass *self = (CFCPerlClass *) base;
+
     CFCBase_decref((CFCBase*)self->parcel);
     CFCBase_decref((CFCBase*)self->client);
     CFCBase_decref((CFCBase*)self->pod_spec);
@@ -126,7 +131,7 @@ CFCPerlClass_destroy(CFCPerlClass *self) {
     FREEMEM(self->cons_aliases);
     FREEMEM(self->cons_inits);
     CFCUtil_free_string_array(self->class_aliases);
-    CFCBase_destroy((CFCBase*)self);
+    CFCBase_destroy(base);
 }
 
 static int

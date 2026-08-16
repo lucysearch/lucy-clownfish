@@ -123,10 +123,13 @@ S_validate_name_or_nickname(const char *orig) {
     return true;
 }
 
+static void
+CFCParcel_destroy(CFCBase *base);
+
 static const CFCMeta CFCPARCEL_META = {
     "Clownfish::CFC::Model::Parcel",
     sizeof(CFCParcel),
-    (CFCBase_destroy_t)CFCParcel_destroy
+    CFCParcel_destroy
 };
 
 CFCParcel*
@@ -356,8 +359,10 @@ CFCParcel_new_from_file(CFCFileSpec *file_spec) {
     return self;
 }
 
-void
-CFCParcel_destroy(CFCParcel *self) {
+static void
+CFCParcel_destroy(CFCBase *base) {
+    CFCParcel *self = (CFCParcel *) base;
+
     FREEMEM(self->name);
     FREEMEM(self->nickname);
     FREEMEM(self->host_module_name);
@@ -376,7 +381,7 @@ CFCParcel_destroy(CFCParcel *self) {
         CFCBase_decref((CFCBase*)self->prereqs[i]);
     }
     FREEMEM(self->prereqs);
-    CFCBase_destroy((CFCBase*)self);
+    CFCBase_destroy(base);
 }
 
 int
@@ -799,10 +804,13 @@ struct CFCPrereq {
     CFCVersion *version;
 };
 
+static void
+CFCPrereq_destroy(CFCBase *base);
+
 static const CFCMeta CFCPREREQ_META = {
     "Clownfish::CFC::Model::Prereq",
     sizeof(CFCPrereq),
-    (CFCBase_destroy_t)CFCPrereq_destroy
+    CFCPrereq_destroy
 };
 
 CFCPrereq*
@@ -830,11 +838,13 @@ CFCPrereq_init(CFCPrereq *self, const char *name, CFCVersion *version) {
     return self;
 }
 
-void
-CFCPrereq_destroy(CFCPrereq *self) {
+static void
+CFCPrereq_destroy(CFCBase *base) {
+    CFCPrereq *self = (CFCPrereq *) base;
+
     FREEMEM(self->name);
     CFCBase_decref((CFCBase*)self->version);
-    CFCBase_destroy((CFCBase*)self);
+    CFCBase_destroy(base);
 }
 
 const char*

@@ -49,9 +49,6 @@ CFCBindCore*
 CFCBindCore_init(CFCBindCore *self, struct CFCHierarchy *hierarchy,
                  const char *header, const char *footer, int charmonic);
 
-void
-CFCBindCore_destroy(CFCBindCore *self);
-
 /** Call `CFCHierarchy_propagate_modified`to establish which
  * classes do not have up-to-date generated .c and .h files, then traverse the
  * hierarchy writing all necessary files.

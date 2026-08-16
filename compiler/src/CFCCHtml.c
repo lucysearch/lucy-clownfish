@@ -57,10 +57,13 @@ struct CFCCHtml {
     char *index_filename;
 };
 
+static void
+CFCCHtml_destroy(CFCBase *base);
+
 static const CFCMeta CFCCHTML_META = {
     "Clownfish::CFC::Binding::C::Html",
     sizeof(CFCCHtml),
-    (CFCBase_destroy_t)CFCCHtml_destroy
+    CFCCHtml_destroy
 };
 
 static const char header_template[] =
@@ -215,14 +218,16 @@ CFCCHtml_init(CFCCHtml *self, CFCHierarchy *hierarchy, const char *header,
     return self;
 }
 
-void
-CFCCHtml_destroy(CFCCHtml *self) {
+static void
+CFCCHtml_destroy(CFCBase *base) {
+    CFCCHtml *self = (CFCCHtml *) base;
+
     CFCBase_decref((CFCBase*)self->hierarchy);
     FREEMEM(self->doc_path);
     FREEMEM(self->header);
     FREEMEM(self->footer);
     FREEMEM(self->index_filename);
-    CFCBase_destroy((CFCBase*)self);
+    CFCBase_destroy(base);
 }
 
 void

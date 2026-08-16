@@ -68,10 +68,13 @@ S_write_class_pod(CFCPerl *self);
 static CFCPerlPodFile*
 S_write_standalone_pod(CFCPerl *self);
 
+static void
+CFCPerl_destroy(CFCBase *base);
+
 static const CFCMeta CFCPERL_META = {
     "Clownfish::CFC::Binding::Perl",
     sizeof(CFCPerl),
-    (CFCBase_destroy_t)CFCPerl_destroy
+    CFCPerl_destroy
 };
 
 CFCPerl*
@@ -100,8 +103,10 @@ CFCPerl_init(CFCPerl *self, CFCHierarchy *hierarchy, const char *lib_dir,
     return self;
 }
 
-void
-CFCPerl_destroy(CFCPerl *self) {
+static void
+CFCPerl_destroy(CFCBase *base) {
+    CFCPerl *self = (CFCPerl *) base;
+
     CFCBase_decref((CFCBase*)self->hierarchy);
     FREEMEM(self->lib_dir);
     FREEMEM(self->header);
@@ -110,7 +115,7 @@ CFCPerl_destroy(CFCPerl *self) {
     FREEMEM(self->c_footer);
     FREEMEM(self->pod_header);
     FREEMEM(self->pod_footer);
-    CFCBase_destroy((CFCBase*)self);
+    CFCBase_destroy(base);
 }
 
 static void

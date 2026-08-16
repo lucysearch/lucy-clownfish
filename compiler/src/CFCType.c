@@ -44,10 +44,13 @@ struct CFCType {
     struct CFCType *child;
 };
 
+static void
+CFCType_destroy(CFCBase *base);
+
 static const CFCMeta CFCTYPE_META = {
     "Clownfish::CFC::Model::Type",
     sizeof(CFCType),
-    (CFCBase_destroy_t)CFCType_destroy
+    CFCType_destroy
 };
 
 CFCType*
@@ -307,8 +310,10 @@ CFCType_resolve(CFCType *self) {
     }
 }
 
-void
-CFCType_destroy(CFCType *self) {
+static void
+CFCType_destroy(CFCBase *base) {
+    CFCType *self = (CFCType *) base;
+
     if (self->child) {
         CFCBase_decref((CFCBase*)self->child);
     }
@@ -317,7 +322,7 @@ CFCType_destroy(CFCType *self) {
     FREEMEM(self->specifier);
     FREEMEM(self->c_string);
     FREEMEM(self->array);
-    CFCBase_destroy((CFCBase*)self);
+    CFCBase_destroy(base);
 }
 
 int

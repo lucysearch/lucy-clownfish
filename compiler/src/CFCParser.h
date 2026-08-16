@@ -44,9 +44,6 @@ CFCParser_new(void);
 CFCParser*
 CFCParser_init(CFCParser *self);
 
-void
-CFCParser_destroy(CFCParser *self);
-
 struct CFCBase*
 CFCParser_parse(CFCParser *self, const char *string);
 

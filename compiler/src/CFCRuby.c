@@ -46,10 +46,13 @@ struct CFCRuby {
 static void
 S_replace_double_colons(char *text, char replacement);
 
+static void
+CFCRuby_destroy(CFCBase *base);
+
 static const CFCMeta CFCRUBY_META = {
     "Clownfish::CFC::Binding::Ruby",
     sizeof(CFCRuby),
-    (CFCBase_destroy_t)CFCRuby_destroy
+    CFCRuby_destroy
 };
 
 CFCRuby*
@@ -97,8 +100,10 @@ CFCRuby_init(CFCRuby *self, CFCParcel *parcel, CFCHierarchy *hierarchy,
     return self;
 }
 
-void
-CFCRuby_destroy(CFCRuby *self) {
+static void
+CFCRuby_destroy(CFCBase *base) {
+    CFCRuby *self = (CFCRuby *) base;
+
     CFCBase_decref((CFCBase*)self->parcel);
     CFCBase_decref((CFCBase*)self->hierarchy);
     FREEMEM(self->lib_dir);
@@ -110,7 +115,7 @@ CFCRuby_destroy(CFCRuby *self) {
     FREEMEM(self->boot_h_path);
     FREEMEM(self->boot_c_path);
     FREEMEM(self->boot_func);
-    CFCBase_destroy((CFCBase*)self);
+    CFCBase_destroy(base);
 }
 
 static void

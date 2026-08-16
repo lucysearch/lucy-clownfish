@@ -64,10 +64,13 @@ static void
 S_write_host_data_json(CFCParcel *parcel, const char *dest_dir,
                        const char *host_lang);
 
+static void
+CFCBindCore_destroy(CFCBase *base);
+
 static const CFCMeta CFCBINDCORE_META = {
     "Clownfish::CFC::Binding::Core",
     sizeof(CFCBindCore),
-    (CFCBase_destroy_t)CFCBindCore_destroy
+    CFCBindCore_destroy
 };
 
 CFCBindCore*
@@ -90,12 +93,14 @@ CFCBindCore_init(CFCBindCore *self, CFCHierarchy *hierarchy,
     return self;
 }
 
-void
-CFCBindCore_destroy(CFCBindCore *self) {
+static void
+CFCBindCore_destroy(CFCBase *base) {
+    CFCBindCore *self = (CFCBindCore *) base;
+
     CFCBase_decref((CFCBase*)self->hierarchy);
     FREEMEM(self->c_header);
     FREEMEM(self->c_footer);
-    CFCBase_destroy((CFCBase*)self);
+    CFCBase_destroy(base);
 }
 
 int
