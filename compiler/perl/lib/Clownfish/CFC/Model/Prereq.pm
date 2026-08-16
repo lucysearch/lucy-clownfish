@@ -15,7 +15,7 @@
 
 package Clownfish::CFC::Model::Prereq;
 use Clownfish::CFC;
-our $VERSION = '0.007000_002';
+our $VERSION = '0.007000_003';
 $VERSION = eval $VERSION;
 
 1;

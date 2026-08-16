@@ -18,7 +18,7 @@ use warnings;
 
 package Clownfish::CFC::Test::TestUtils;
 
-our $VERSION = '0.007000_002';
+our $VERSION = '0.007000_003';
 $VERSION = eval $VERSION;
 
 use Exporter 'import';

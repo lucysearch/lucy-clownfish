@@ -57,3 +57,6 @@ lemon/lemon$
 
 ^MYMETA.yml$
 ^MYMETA\.json$
+
+# never ship compiled charmonizer
+charmonizer$
