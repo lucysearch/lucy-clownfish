@@ -9258,28 +9258,6 @@ cfish_MakeFile_write_c_test_rules(cfish_MakeFile *self) {
 }
 
 static void
-cfish_MakeFile_write_c_install_rules(cfish_MakeFile *self) {
-    const char *dir_sep = chaz_OS_dir_sep();
-    char *src;
-
-    src = chaz_Util_join(dir_sep, "autogen", "share", NULL);
-    chaz_MakeFile_install_dir(self->makefile, src, "$(DATADIR)", NULL);
-    free(src);
-
-    src = chaz_Util_join(dir_sep, "autogen", "man", NULL);
-    chaz_MakeFile_install_dir(self->makefile, src, "$(MANDIR)", NULL);
-    free(src);
-
-    chaz_MakeFile_install_pkgconfig(self->makefile, "clownfish", cfish_version,
-        "Name: Clownfish\n"
-        "Description: Symbiotic object system\n"
-        "URL: https://github.com/lucysearch/lucy-clownfish\n"
-        "Version: $${version}\n"
-        "Libs: -L$${libdir} -lclownfish\n"
-    );
-}
-
-static void
 S_cfh_file_callback(const char *dir, char *file, void *context) {
     cfish_MakeFile *self = (cfish_MakeFile*)context;
     const char *dir_sep = chaz_OS_dir_sep();
