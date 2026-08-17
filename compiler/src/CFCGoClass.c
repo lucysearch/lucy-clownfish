@@ -142,7 +142,7 @@ CFCGoClass_get_client(CFCGoClass *self) {
 }
 
 CFCGoClass**
-CFCGoClass_registry() {
+CFCGoClass_registry(void) {
     if (!registry) {
         registry = (CFCGoClass**)CALLOCATE(1, sizeof(CFCGoClass*));
     }
