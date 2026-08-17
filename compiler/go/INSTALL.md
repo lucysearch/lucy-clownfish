@@ -1,4 +1,4 @@
-Apache Clownfish symbiotic object system -- CFC compiler Go bindings
+Clownfish symbiotic object system -- CFC compiler Go bindings
 --------------------------------------------------------------------
 
 To install from an official release of Clownfish:

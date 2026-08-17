@@ -219,11 +219,11 @@ clownfish_extension = Extension('clownfish._clownfish',
                                  sources = c_filepaths)
 
 setup(name = 'clownfish',
-      version = '0.6.4',
+      version = '0.7.0',
       description = 'Clownfish runtime',
-      author = 'Apache Lucy Project',
-      author_email = 'dev at lucy dot apache dot org',
-      url = 'http://lucy.apache.org',
+      author = 'Lucy Project',
+      author_email = 'lucy@dezi.org',
+      url = 'https://github.com/lucysearch/lucy-clownfish',
       packages = ['clownfish',
                  ],
       cmdclass = {

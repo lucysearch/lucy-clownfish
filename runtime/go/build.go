@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-/* Build "script" for Apache Clownfish runtime.
+/* Build "script" for Clownfish runtime.
  */
 package main
 

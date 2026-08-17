@@ -1,4 +1,4 @@
-Apache Clownfish symbiotic object system -- runtime Go bindings
+Clownfish symbiotic object system -- runtime Go bindings
 ---------------------------------------------------------------
 
 As a prerequisite, install the Go bindings for the Clownfish compiler (CFC).
