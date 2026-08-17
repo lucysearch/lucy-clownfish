@@ -1,5 +1,7 @@
 #!/bin/sh
 
+set -e
+
 cd compiler/perl
 perl Build.PL
 ./Build
