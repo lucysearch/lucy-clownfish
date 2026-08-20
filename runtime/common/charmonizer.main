@@ -81,6 +81,9 @@ static void
 cfish_MakeFile_write_c_test_rules(cfish_MakeFile *self);
 
 static void
+cfish_MakeFile_write_c_install_rules(cfish_MakeFile *self);
+
+static void
 S_cfh_file_callback(const char *dir, char *file, void *context);
 
 static int
@@ -129,6 +132,7 @@ int main(int argc, const char **argv) {
     chaz_Floats_run();
     chaz_LargeFiles_run();
     chaz_Memory_run();
+    chaz_SymbolVisibility_run();
     chaz_VariadicMacros_run();
 
     /* Local definitions. */
@@ -186,14 +190,15 @@ static void
 S_add_compiler_flags(struct chaz_CLI *cli) {
     chaz_CFlags *extra_cflags = chaz_CC_get_extra_cflags();
 
-    if (chaz_Probe_gcc_version_num()) {
+    if (chaz_CC_is_gcc()) {
         if (!chaz_CC_is_mingw()) {
             /* When using the MSVCRT, -pedantic complains about %I64 format
              * specifiers.
              */
             chaz_CFlags_append(extra_cflags, "-pedantic");
         }
-        chaz_CFlags_append(extra_cflags, "-Wall -Wextra -Wno-variadic-macros");
+        chaz_CFlags_append(extra_cflags,
+            "-Wall -Wextra -Wno-variadic-macros -Wno-cast-function-type");
         if (strcmp(chaz_CLI_strval(cli, "host"), "perl") == 0) {
             chaz_CFlags_append(extra_cflags, "-DPERL_GCC_PEDANTIC");
         }
@@ -208,8 +213,8 @@ S_add_compiler_flags(struct chaz_CLI *cli) {
             chaz_CFlags_append(extra_cflags, "-ffloat-store");
         }
     }
-    else if (chaz_Probe_msvc_version_num()) {
-        if (chaz_Probe_msvc_version_num() < 1800) {
+    else if (chaz_CC_is_msvc()) {
+        if (chaz_CC_test_msvc_version("< 1800")) {
             /* Compile as C++ under MSVC11 and below. */
             chaz_CFlags_append(extra_cflags, "/TP");
         }
@@ -218,11 +223,6 @@ S_add_compiler_flags(struct chaz_CLI *cli) {
         /* Thwart stupid warnings. */
         chaz_CFlags_append(extra_cflags, "/D_CRT_SECURE_NO_WARNINGS");
         chaz_CFlags_append(extra_cflags, "/D_SCL_SECURE_NO_WARNINGS");
-
-        if (chaz_Probe_msvc_version_num() < 1300) {
-            /* Redefine 'for' to fix broken 'for' scoping under MSVC6. */
-            chaz_CFlags_append(extra_cflags, "/Dfor=\"if(0);else for\"");
-        }
     }
 
     chaz_CFlags_hide_symbols(extra_cflags);
@@ -314,14 +314,13 @@ cfish_MakeFile_destroy(cfish_MakeFile *self) {
 
 static void
 cfish_MakeFile_write(cfish_MakeFile *self, chaz_CFlags *extra_link_flags) {
-    const char *dir_sep = chaz_OS_dir_sep();
-    const char *host    = chaz_CLI_strval(self->cli, "host");
+    const char *host = chaz_CLI_strval(self->cli, "host");
+    int is_c = strcmp(host, "c") == 0;
 
     const char *lib_objs      = NULL;
     const char *test_lib_objs = NULL;
 
     chaz_MakeVar  *var;
-    chaz_MakeRule *rule;
 
     chaz_CFlags *extra_cflags = chaz_CC_get_extra_cflags();
     chaz_CFlags *makefile_cflags;
@@ -335,8 +334,6 @@ cfish_MakeFile_write(cfish_MakeFile *self, chaz_CFlags *extra_link_flags) {
     chaz_MakeFile_add_var(self->makefile, "BASE_DIR", self->base_dir);
 
     /* C compiler */
-
-    chaz_MakeFile_add_var(self->makefile, "CC", chaz_CC_get_cc());
 
     makefile_cflags = chaz_CC_new_cflags();
 
@@ -363,15 +360,15 @@ cfish_MakeFile_write(cfish_MakeFile *self, chaz_CFlags *extra_link_flags) {
 
     /* Core library. */
 
-    if (strcmp(host, "c") == 0 || strcmp(host, "perl") == 0) {
+    if (is_c || strcmp(host, "perl") == 0) {
         /* Shared library for C and Perl. */
 
         chaz_MakeFile_add_rule(self->makefile, "all",
                                "$(CLOWNFISH_SHARED_LIB)");
 
-        self->lib
-            = chaz_MakeFile_add_shared_lib(self->makefile, NULL, "clownfish",
-                                           cfish_version, cfish_major_version);
+        self->lib = chaz_MakeFile_add_shared_lib(self->makefile, NULL,
+                                                 "clownfish", cfish_version,
+                                                 cfish_major_version, is_c);
         lib_objs = "$(CLOWNFISH_SHARED_LIB_OBJS)";
 
         compile_flags = chaz_MakeBinary_get_compile_flags(self->lib);
@@ -389,8 +386,8 @@ cfish_MakeFile_write(cfish_MakeFile *self, chaz_CFlags *extra_link_flags) {
                                "$(CLOWNFISH_STATIC_LIB)"
                                " $(TESTCFISH_STATIC_LIB)");
 
-        self->lib
-            = chaz_MakeFile_add_static_lib(self->makefile, NULL, "clownfish");
+        self->lib = chaz_MakeFile_add_static_lib(self->makefile, NULL,
+                                                 "clownfish", 0);
         lib_objs = "$(CLOWNFISH_STATIC_LIB_OBJS)";
 
         if (strcmp(host, "python") == 0) {
@@ -398,7 +395,7 @@ cfish_MakeFile_write(cfish_MakeFile *self, chaz_CFlags *extra_link_flags) {
              * library.
              */
             compile_flags = chaz_MakeBinary_get_compile_flags(self->lib);
-            if (chaz_CC_msvc_version_num()) {
+            if (chaz_CC_is_msvc()) {
                 /* Python uses /MT. */
                 chaz_CFlags_append(compile_flags, "/MT");
             }
@@ -420,12 +417,13 @@ cfish_MakeFile_write(cfish_MakeFile *self, chaz_CFlags *extra_link_flags) {
 
     /* Test library. */
 
-    if (strcmp(host, "c") == 0 || strcmp(host, "perl") == 0) {
+    if (is_c || strcmp(host, "perl") == 0) {
         /* Shared library for C and Perl. */
 
         self->test_lib
             = chaz_MakeFile_add_shared_lib(self->makefile, NULL, "testcfish",
-                                           cfish_version, cfish_major_version);
+                                           cfish_version, cfish_major_version,
+                                           0);
         test_lib_objs = "$(TESTCFISH_SHARED_LIB_OBJS)";
 
         compile_flags = chaz_MakeBinary_get_compile_flags(self->test_lib);
@@ -443,8 +441,8 @@ cfish_MakeFile_write(cfish_MakeFile *self, chaz_CFlags *extra_link_flags) {
     else {
         /* Static library for Go and Python. */
 
-        self->test_lib
-            = chaz_MakeFile_add_static_lib(self->makefile, NULL, "testcfish");
+        self->test_lib = chaz_MakeFile_add_static_lib(self->makefile, NULL,
+                                                      "testcfish", 0);
         test_lib_objs = "$(TESTCFISH_STATIC_LIB_OBJS)";
 
         if (strcmp(host, "python") == 0) {
@@ -452,7 +450,7 @@ cfish_MakeFile_write(cfish_MakeFile *self, chaz_CFlags *extra_link_flags) {
              * library.
              */
             compile_flags = chaz_MakeBinary_get_compile_flags(self->test_lib);
-            if (chaz_CC_msvc_version_num()) {
+            if (chaz_CC_is_msvc()) {
                 /* Python uses /MT. */
                 chaz_CFlags_append(compile_flags, "/MT");
             }
@@ -476,9 +474,10 @@ cfish_MakeFile_write(cfish_MakeFile *self, chaz_CFlags *extra_link_flags) {
     chaz_MakeFile_add_rule(self->makefile, test_lib_objs,
                            self->autogen_target);
 
-    if (strcmp(host, "c") == 0) {
+    if (is_c) {
         cfish_MakeFile_write_c_cfc_rules(self);
         cfish_MakeFile_write_c_test_rules(self);
+        cfish_MakeFile_write_c_install_rules(self);
     }
 
     /* Targets to compile object files for Perl. */
@@ -511,8 +510,8 @@ cfish_MakeFile_write_c_cfc_rules(cfish_MakeFile *self) {
 
     chaz_MakeRule *rule;
 
-    const char *dir_sep  = chaz_OS_dir_sep();
-    const char *exe_ext  = chaz_CC_exe_ext();
+    const char *dir_sep = chaz_OS_dir_sep();
+    const char *exe_ext = chaz_OS_exe_ext();
 
     char *cfc_dir;
     char *cfc_exe;
@@ -535,8 +534,8 @@ cfish_MakeFile_write_c_cfc_rules(cfish_MakeFile *self) {
     rule = chaz_MakeFile_add_rule(self->makefile, self->autogen_target,
                                   cfc_exe);
     chaz_MakeRule_add_prereq(rule, "$(CLOWNFISH_HEADERS)");
-    cfc_command = chaz_Util_join("", cfc_exe, " --source=", self->core_dir,
-                                 " --source=", self->test_dir,
+    cfc_command = chaz_Util_join("", cfc_exe, " --charmonic --source=",
+                                 self->core_dir, " --source=", self->test_dir,
                                  " --dest=autogen --header=cfc_header", NULL);
     chaz_MakeRule_add_command(rule, cfc_command);
 
@@ -566,7 +565,7 @@ cfish_MakeFile_write_c_test_rules(cfish_MakeFile *self) {
     chaz_CFlags     *link_flags;
     chaz_MakeRule   *rule;
 
-    exe = chaz_MakeFile_add_exe(self->makefile, "t", "test_cfish");
+    exe = chaz_MakeFile_add_exe(self->makefile, "t", "test_cfish", 0);
     chaz_MakeBinary_add_src_file(exe, "t", "test_cfish.c");
 
     link_flags = chaz_MakeBinary_get_link_flags(exe);
@@ -586,23 +585,11 @@ cfish_MakeFile_write_c_test_rules(cfish_MakeFile *self) {
     chaz_MakeRule_add_command(rule, "$(TEST_CFISH_EXE)");
 
     if (chaz_OS_shell_type() == CHAZ_OS_POSIX) {
-        const char *valgrind_command;
-
         rule = chaz_MakeFile_add_rule(self->makefile, "valgrind",
                                       "$(TEST_CFISH_EXE)");
-        if (chaz_CC_binary_format() == CHAZ_CC_BINFMT_ELF) {
-            valgrind_command = "LD_LIBRARY_PATH=. CLOWNFISH_VALGRIND=1"
-                               " valgrind"
-                               " --leak-check=full"
-                               " $(TEST_CFISH_EXE)";
-        }
-        else {
-            valgrind_command = "CLOWNFISH_VALGRIND=1"
-                               " valgrind"
-                               " --leak-check=full"
-                               " $(TEST_CFISH_EXE)";
-        }
-        chaz_MakeRule_add_command(rule, valgrind_command);
+        chaz_MakeRule_add_command(rule,
+                                  "valgrind --leak-check=full"
+                                  " $(TEST_CFISH_EXE)");
     }
 
     if (chaz_CLI_defined(self->cli, "enable-coverage")) {

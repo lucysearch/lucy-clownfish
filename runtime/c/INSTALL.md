@@ -4,43 +4,52 @@ Build instructions for the Clownfish C library
 Building under UNIX and derivatives or Cygwin
 ---------------------------------------------
 
-    $ ./configure
-    $ make
-    $ make test
+    ./configure --prefix [ install prefix ]
+    make
+    make test
+    make install
 
 Building under Windows
 ----------------------
 
-You need MSVC or gcc as C compiler and nmake or mingw32-make as make utility.
+You need MSVC or gcc as C compiler and nmake, mingw32-make, or standard
+GNU make as make utility. When building under cmd.exe, configure with:
 
-When using cmd.exe configure with:
-
-    $ configure.bat
-
-When using the MSYS shell configure with:
-
-    $ ./configure
-
-When building with nmake run:
-
-    $ nmake
-    $ nmake test
-
-When building with mingw32-make run:
-
-    $ mingw32-make
-    $ mingw32-make test
+    configure.bat --prefix [ install prefix ]
 
 Configuration
 -------------
 
-    ./configure [ options ] [ -- cflags ]
+    [ environment ] ./configure [ options ] [ -- cflags ]
 
-Options include
+### Options
 
     --enable-coverage
-        Enable code coverage. Create HTML pages with coverage data using
-        lcov by running "make coverage".
+
+Enable code coverage. Create HTML pages with coverage data using
+lcov by running "make coverage".
+
     --disable-threads
-        Disable thread support.
+
+Disable thread support.
+
+    --prefix
+    --bindir
+    --datarootdir
+    --datadir
+    --libdir
+    --mandir
+
+Installation directories following the GNU Autoconf convention.
+
+### Environment variables
+
+    CC
+
+The C compiler.
+
+    TARGET_CC
+
+The target compiler when cross-compiling. `CC` can be set in addition
+to specify the host compiler.
 
