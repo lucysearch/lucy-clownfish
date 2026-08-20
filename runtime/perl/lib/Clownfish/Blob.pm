@@ -15,7 +15,7 @@
 
 package Clownfish::Blob;
 use Clownfish;
-our $VERSION = '0.006000';
+our $VERSION = '0.006004';
 $VERSION = eval $VERSION;
 
 1;

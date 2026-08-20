@@ -3,6 +3,37 @@ Revision history for Clownfish
 0.7.0  2026-08-15
   * Fork from Apache Clownfish -> Clownfish
 
+0.6.4  2026-06-28
+
+  Bugfixes:
+
+    * Fix clang compiler warnings with non-strict prototypes, which prevented
+      installing Clownfish on MacOS. This is a Perl release only.
+
+0.6.3  2018-02-20
+
+  Bugfixes:
+
+    * Fix build issue with recent Go versions
+    * [CLOWNFISH-119] - Build fails if "." is not in @INC
+
+0.6.2  2017-11-15
+
+  Improvements:
+
+    * [CLOWNFISH-118] - Prepare for CV-in-stash optimization in Perl 5.28
+
+0.6.1  2016-12-09
+
+  Bugfixes:
+
+    * [CLOWNFISH-104] - BSD make doesn't support pattern rules
+    * [CLOWNFISH-105] - CPAN dist includes Clownfish/Test.xs
+    * [CLOWNFISH-106] - CFC needs more recent Module::Build
+    * [CLOWNFISH-107] - Threaded error tests segfault under Perl 5.10.0
+    * [CLOWNFISH-108] - Clownfish::Test shouldn't be listed in META.yml
+    * [CLOWNFISH-111] - Compilation fails with ccache
+
 0.6.0  2016-09-24
 
   Bugfixes:
