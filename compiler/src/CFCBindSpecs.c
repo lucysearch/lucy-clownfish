@@ -69,7 +69,7 @@ static const CFCMeta CFCBINDSPECS_META = {
 };
 
 CFCBindSpecs*
-CFCBindSpecs_new() {
+CFCBindSpecs_new(void) {
     CFCBindSpecs *self = (CFCBindSpecs*)CFCBase_allocate(&CFCBINDSPECS_META);
     return CFCBindSpecs_init(self);
 }
@@ -98,7 +98,7 @@ CFCBindSpecs_destroy(CFCBase *base) {
 }
 
 const char*
-CFCBindSpecs_get_typedefs() {
+CFCBindSpecs_get_typedefs(void) {
     return
         "/* Structs for Class initialization.\n"
         " */\n"
@@ -303,7 +303,7 @@ char*
 CFCBindSpecs_init_func_def(CFCBindSpecs *self) {
     const char *pattern =
         "static void\n"
-        "S_bootstrap_specs() {\n"
+        "S_bootstrap_specs(void) {\n"
         "%s"
         "\n"
         "    cfish_Class_bootstrap(&parcel_spec);\n"

@@ -60,9 +60,20 @@ S_write_parcel_c(CFCBindCore *self, CFCParcel *parcel);
 static void
 S_write_platform_h(CFCBindCore *self);
 
-static void
-S_write_host_data_json(CFCParcel *parcel, const char *dest_dir,
-                       const char *host_lang);
+static char*
+S_charmony_feature_defines(void);
+
+static char*
+S_charmony_string_defines(void);
+
+static char*
+S_charmony_stdbool_defines(void);
+
+static char*
+S_charmony_stdint_defines(void);
+
+static char*
+S_charmony_alloca_defines(void);
 
 static void
 CFCBindCore_destroy(CFCBase *base);
@@ -479,7 +490,7 @@ S_write_parcel_c(CFCBindCore *self, CFCParcel *parcel) {
         "}\n"
         "\n"
         "void\n"
-        "%sbootstrap_parcel() {\n"
+        "%sbootstrap_parcel(void) {\n"
         "%s" // Bootstrap prerequisite parcels.
         "    %sbootstrap_internal(0);\n"
         "}\n"
@@ -665,6 +676,132 @@ S_write_platform_h(CFCBindCore *self) {
     CFCUtil_write_file(filepath, file_content, strlen(file_content));
     FREEMEM(filepath);
     FREEMEM(file_content);
+}
+
+static char*
+S_charmony_feature_defines(void) {
+    char *defines = CFCUtil_strdup("");
+
+#ifdef CHY_LITTLE_END
+    // Needed by NumberUtils.cfh.
+    defines = CFCUtil_cat(defines, "#define CFISH_LITTLE_END\n", NULL);
+#endif
+#ifdef CHY_BIG_END
+    // Needed by NumberUtils.cfh.
+    defines = CFCUtil_cat(defines, "#define CFISH_BIG_END\n", NULL);
+#endif
+#ifdef CHY_HAS_FUNC_MACRO
+    // Needed by Err.cfh.
+    defines = CFCUtil_cat(defines, "#define CFISH_HAS_FUNC_MACRO\n", NULL);
+#endif
+#ifdef CHY_HAS_VARIADIC_MACROS
+    // Needed by Err.cfh.
+    defines = CFCUtil_cat(defines, "#define CFISH_HAS_VARIADIC_MACROS\n",
+                          NULL);
+#endif
+#ifdef CHY_HAS_ISO_VARIADIC_MACROS
+    // Needed by Err.cfh.
+    defines = CFCUtil_cat(defines, "#define CFISH_HAS_ISO_VARIADIC_MACROS\n",
+                          NULL);
+#endif
+#ifdef CHY_HAS_GNUC_VARIADIC_MACROS
+    // Needed by Err.cfh.
+    defines = CFCUtil_cat(defines, "#define CFISH_HAS_GNUC_VARIADIC_MACROS\n",
+                          NULL);
+#endif
+
+    return defines;
+}
+
+static char*
+S_charmony_string_defines(void) {
+    const char *pattern =
+        "#define CFISH_INLINE %s\n"
+        "#define CFISH_EXPORT %s\n"
+        "#define CFISH_IMPORT %s\n"
+        "#define CFISH_SIZEOF_CHAR %s\n"
+        "#define CFISH_SIZEOF_SHORT %s\n"
+        "#define CFISH_SIZEOF_INT %s\n"
+        "#define CFISH_SIZEOF_LONG %s\n"
+        "#define CFISH_SIZEOF_SIZE_T %s\n"
+        "#define CFISH_FUNC_MACRO %s\n"
+        "#define CFISH_U64_TO_DOUBLE(x) %s\n";
+    char *defines
+        = CFCUtil_sprintf(pattern,
+                          XSTRING(CHY_INLINE),
+                          XSTRING(CHY_EXPORT),
+                          XSTRING(CHY_IMPORT),
+                          XSTRING(CHY_SIZEOF_CHAR),
+                          XSTRING(CHY_SIZEOF_SHORT),
+                          XSTRING(CHY_SIZEOF_INT),
+                          XSTRING(CHY_SIZEOF_LONG),
+                          XSTRING(CHY_SIZEOF_SIZE_T),
+                          XSTRING(CHY_FUNC_MACRO),
+                          XSTRING(CHY_U64_TO_DOUBLE(x)));
+
+    return defines;
+}
+
+static char*
+S_charmony_stdbool_defines(void) {
+#ifdef CHY_HAS_STDBOOL_H
+    const char *defines = "#include <stdbool.h>\n";
+#else
+    const char *defines =
+        "#if (!defined(__cplusplus) && !defined(CFISH_HAS_STDBOOL))\n"
+        "  typedef int bool;\n"
+        "  #ifndef true\n"
+        "    #define true 1\n"
+        "  #endif\n"
+        "  #ifndef false\n"
+        "    #define false 0\n"
+        "  #endif\n"
+        "#endif\n";
+#endif
+
+    return CFCUtil_strdup(defines);
+}
+
+static char*
+S_charmony_stdint_defines(void) {
+#ifdef CHY_HAS_STDINT_H
+    return CFCUtil_strdup("#include <stdint.h>\n");
+#else
+    const char *pattern =
+        "#ifndef CFISH_HAS_STDINT\n"
+        "  typedef %s int8_t;\n"
+        "  typedef %s uint8_t;\n"
+        "  typedef %s int16_t;\n"
+        "  typedef %s uint16_t;\n"
+        "  typedef %s int32_t;\n"
+        "  typedef %s uint32_t;\n"
+        "  typedef %s int64_t;\n"
+        "  typedef %s uint64_t;\n"
+        "#endif\n";
+    return CFCUtil_sprintf(pattern,
+                           XSTRING(CHY_INT8_T),  XSTRING(CHY_UINT8_T),
+                           XSTRING(CHY_INT16_T), XSTRING(CHY_UINT16_T),
+                           XSTRING(CHY_INT32_T), XSTRING(CHY_UINT32_T),
+                           XSTRING(CHY_INT64_T), XSTRING(CHY_UINT64_T));
+#endif
+}
+
+static char*
+S_charmony_alloca_defines(void) {
+    char *defines = CFCUtil_strdup("");
+
+#if defined(CHY_HAS_ALLOCA_H)
+    defines = CFCUtil_cat(defines, "#include <alloca.h>\n", NULL);
+#elif defined(CHY_HAS_MALLOC_H)
+    defines = CFCUtil_cat(defines, "#include <malloc.h>\n", NULL);
+#elif defined(CHY_ALLOCA_IN_STDLIB_H)
+    defines = CFCUtil_cat(defines, "#include <stdlib.h>\n", NULL);
+#endif
+
+    defines = CFCUtil_cat(defines, "#define cfish_alloca ",
+                          XSTRING(chy_alloca), "\n", NULL);
+
+    return defines;
 }
 
 void

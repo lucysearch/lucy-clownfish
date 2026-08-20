@@ -28,14 +28,14 @@ my $builder = Clownfish::Build->new(
     requires           => { 'perl' => '5.8.3', },
     configure_requires => {
         'Module::Build'               => 0.280801,
-        'Clownfish::CFC::Perl::Build' => 0.006004,
+        'Clownfish::CFC::Perl::Build' => 0.007000,
     },
     build_requires => {
         'Module::Build'      => 0.280801,
         'ExtUtils::CBuilder' => 0.21,
         'ExtUtils::ParseXS'  => 3.00,
         'Devel::PPPort'      => 3.14,
-        'Clownfish::CFC'     => 0.006004,
+        'Clownfish::CFC'     => 0.007000,
     },
     no_index => {
         directory => [qw( buildlib )],

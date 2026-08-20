@@ -464,12 +464,16 @@ S_write_module_file(CFCPython *self, CFCParcel *parcel, const char *dest) {
     char *module_adds        = CFCUtil_strdup("");
 
     // Add privacy defines and parcel bootstrapping calls.
-    const char *privacy_sym = CFCParcel_get_privacy_sym(parcel);
-    privacy_syms = CFCUtil_cat(privacy_syms, "#define ", privacy_sym,
-                               "\n", NULL);
-    const char *prefix = CFCParcel_get_prefix(parcel);
-    parcel_boots = CFCUtil_cat(parcel_boots, "    ", prefix,
-                               "bootstrap_parcel();\n", NULL);
+    for (size_t i = 0; parcels[i]; ++i) {
+        if (!CFCParcel_included(parcels[i])) {
+            const char *privacy_sym = CFCParcel_get_privacy_sym(parcels[i]);
+            privacy_syms = CFCUtil_cat(privacy_syms, "#define ", privacy_sym,
+                                       "\n", NULL);
+            const char *prefix = CFCParcel_get_prefix(parcels[i]);
+            parcel_boots = CFCUtil_cat(parcel_boots, "    ", prefix,
+                                       "bootstrap_parcel(void);\n", NULL);
+        }
+    }
 
     for (size_t i = 0; ordered[i] != NULL; i++) {
         CFCClass *klass = ordered[i];
