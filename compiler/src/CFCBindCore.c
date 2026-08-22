@@ -479,7 +479,7 @@ S_write_parcel_c(CFCBindCore *self, CFCParcel *parcel) {
         "}\n"
         "\n"
         "void\n"
-        "%sbootstrap_parcel() {\n"
+        "%sbootstrap_parcel(void) {\n"
         "%s" // Bootstrap prerequisite parcels.
         "    %sbootstrap_internal(0);\n"
         "}\n"
