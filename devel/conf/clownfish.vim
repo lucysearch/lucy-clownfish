@@ -16,7 +16,7 @@
 " Vim syntax file
 " Language:     Clownfish
 " Maintainer:   Lucy Developers
-" URL:          http://lucy.apache.org
+" URL:          https://github.com/lucysearch
 
 if exists("b:current_syntax")
     finish

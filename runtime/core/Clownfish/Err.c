@@ -236,7 +236,7 @@ Err_win_error() {
 #else
 
 char*
-Err_win_error() {
+Err_win_error(void) {
     return NULL; // Never called.
 }
 
