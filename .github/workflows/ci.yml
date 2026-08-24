@@ -2,13 +2,27 @@ name: CI
 on: [push, pull_request]
 
 jobs:
-  c:
+  linux-c:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
       - name: Build and test
+        run: .github/bin/test_asan.sh
+  windows-cl:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v7
+      - name: Build and test
+        shell: cmd
+        run: .github/bin/test_c.bat
+  windows-gcc:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v7
+      - name: Build and test
+        shell: bash
         run: .github/bin/test_c.sh
-  perl:
+  linux-perl:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
