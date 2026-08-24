@@ -21,7 +21,7 @@
 #include "Clownfish/Test.h"
 
 int
-main() {
+main(void) {
     cfish_TestFormatter *formatter;
     cfish_TestSuite     *suite;
     bool success;

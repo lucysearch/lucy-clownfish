@@ -41,7 +41,7 @@ S_init_Test(void) {
 }
 
 void
-Init_Clownfish() { 
+Init_Clownfish(void) { 
     mClownfish  = rb_define_module("Clownfish");
     S_init_Test();
 }

@@ -32,11 +32,11 @@
 static ErrContext err_context;
 
 void
-Tls_init() {
+Tls_init(void) {
 }
 
 ErrContext*
-Tls_get_err_context() {
+Tls_get_err_context(void) {
     return &err_context;
 }
 
@@ -48,7 +48,7 @@ Tls_get_err_context() {
 static DWORD err_context_tls_index;
 
 void
-Tls_init() {
+Tls_init(void) {
     DWORD tls_index = TlsAlloc();
     if (tls_index == TLS_OUT_OF_INDEXES) {
         fprintf(stderr, "TlsAlloc failed (TLS_OUT_OF_INDEXES)\n");
@@ -62,7 +62,7 @@ Tls_init() {
 }
 
 ErrContext*
-Tls_get_err_context() {
+Tls_get_err_context(void) {
     ErrContext *context
         = (ErrContext*)TlsGetValue(err_context_tls_index);
 
@@ -106,7 +106,7 @@ static void
 S_destroy_context(void *context);
 
 void
-Tls_init() {
+Tls_init(void) {
     int error = pthread_key_create(&err_context_key, S_destroy_context);
     if (error) {
         fprintf(stderr, "pthread_key_create failed: %d\n", error);
@@ -115,7 +115,7 @@ Tls_init() {
 }
 
 ErrContext*
-Tls_get_err_context() {
+Tls_get_err_context(void) {
     ErrContext *context
         = (ErrContext*)pthread_getspecific(err_context_key);
 

@@ -1447,7 +1447,7 @@ CFISH_Bool_To_Host_IMP(cfish_Boolean *self, void *vcache) {
 #ifndef CFISH_NOTHREADS
 
 void*
-cfish_TestUtils_clone_host_runtime() {
+cfish_TestUtils_clone_host_runtime(void) {
     PerlInterpreter *interp = (PerlInterpreter*)PERL_GET_CONTEXT;
     PerlInterpreter *clone  = perl_clone(interp, CLONEf_CLONE_HOST);
     PERL_SET_CONTEXT(interp);

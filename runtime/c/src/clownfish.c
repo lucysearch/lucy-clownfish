@@ -180,12 +180,12 @@ Method_Host_Name_IMP(Method *self) {
 /**** Err ******************************************************************/
 
 void
-Err_init_class() {
+Err_init_class(void) {
     Tls_init();
 }
 
 Err*
-Err_get_error() {
+Err_get_error(void) {
     return Tls_get_err_context()->current_error;
 }
 
@@ -253,7 +253,7 @@ Err_trap(Err_Attempt_t routine, void *routine_context) {
 /**** TestUtils ************************************************************/
 
 void*
-cfish_TestUtils_clone_host_runtime() {
+cfish_TestUtils_clone_host_runtime(void) {
     return NULL;
 }
 

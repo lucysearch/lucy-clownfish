@@ -19,7 +19,7 @@
 #include "Clownfish/TestHarness/TestUtils.h"
 
 void*
-TestUtils_clone_host_runtime() {
+TestUtils_clone_host_runtime(void) {
     return NULL;
 }
 
