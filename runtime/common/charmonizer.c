@@ -9407,7 +9407,7 @@ S_need_libpthread(chaz_CLI *cli) {
     static const char source[] =
         "#include <pthread.h>\n"
         "\n"
-        "int main() {\n"
+        "int main(void) {\n"
         "    pthread_create(0, 0, 0, 0);\n"
         "    pthread_key_create(0, 0);\n"
         "    return 0;\n"

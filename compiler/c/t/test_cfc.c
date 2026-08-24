@@ -20,7 +20,7 @@
 #include "CFCTest.h"
 
 int
-main() {
+main(void) {
     CFCTest *test = CFCTest_new("clownfish");
     CFCTest_run_all(test, NULL);
     int pass = CFCTest_finish(test);

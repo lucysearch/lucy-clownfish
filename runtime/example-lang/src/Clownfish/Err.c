@@ -17,11 +17,11 @@
 #include "CFBind.h"
 
 void
-cfish_Err_init_class() {
+cfish_Err_init_class(void) {
 }
 
 cfish_Err*
-cfish_Err_get_error() {
+cfish_Err_get_error(void) {
     THROW(CFISH_ERR, "TODO");
     UNREACHABLE_RETURN(cfish_Err*);
 }

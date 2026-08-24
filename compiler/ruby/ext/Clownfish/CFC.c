@@ -192,7 +192,7 @@ S_init_Hierarchy(void) {
 }
 
 void
-Init_CFC() { 
+Init_CFC(void) { 
     mClownfish  = rb_define_module("Clownfish");
     mCFC        = rb_define_module_under(mClownfish, "CFC");
     mBinding    = rb_define_module_under(mCFC, "Binding");

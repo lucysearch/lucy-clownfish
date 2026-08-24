@@ -218,7 +218,7 @@ Err_init_class(void) {
 }
 
 Err*
-Err_get_error() {
+Err_get_error(void) {
     return current_error;
 }
 

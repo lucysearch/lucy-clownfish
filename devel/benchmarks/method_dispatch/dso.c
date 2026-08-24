@@ -29,7 +29,7 @@ method_t Obj_Hello_THUNK_PTR;
 unsigned int Obj_Hello_INTERFACE_OFFSET;
 
 void
-bootstrap() {
+bootstrap(void) {
     size_t class_size = offsetof(class_t, vtable)
                         + (METHOD_IDX + 1) * sizeof(method_t);
 
@@ -50,7 +50,7 @@ bootstrap() {
 }
 
 obj_t*
-Obj_new() {
+Obj_new(void) {
     obj_t *self = (obj_t *)malloc(sizeof(obj_t));
 
     self->refcount = 1;

@@ -22,7 +22,7 @@
 #include "Clownfish/String.h"
 
 TestHost*
-TestHost_new() {
+TestHost_new(void) {
     TestHost *self = (TestHost*)Class_Make_Obj(TESTHOST);
     return TestHost_init(self);
 }

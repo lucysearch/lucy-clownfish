@@ -1019,7 +1019,7 @@ CFBind_swap_env(jmp_buf *env) {
 }
 
 int
-CFBind_migrate_cferr() {
+CFBind_migrate_cferr(void) {
     if (thrown_error != NULL) {
         cfish_Err *err = thrown_error;
         thrown_error = NULL;
@@ -1039,7 +1039,7 @@ cfish_Err_init_class(void) {
 }
 
 cfish_Err*
-cfish_Err_get_error() {
+cfish_Err_get_error(void) {
     return current_error;
 }
 
@@ -1101,7 +1101,7 @@ cfish_Err_trap(CFISH_Err_Attempt_t routine, void *context) {
 /**** TestUtils ************************************************************/
 
 void*
-cfish_TestUtils_clone_host_runtime() {
+cfish_TestUtils_clone_host_runtime(void) {
     CFISH_THROW(CFISH_ERR, "TODO");
     CFISH_UNREACHABLE_RETURN(void*);
 }

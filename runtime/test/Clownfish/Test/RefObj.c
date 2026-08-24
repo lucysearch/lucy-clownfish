@@ -23,7 +23,7 @@
 #include "Clownfish/Err.h"
 
 RefObj*
-RefObj_new() {
+RefObj_new(void) {
     return (RefObj*)Class_Make_Obj(REFOBJ);
 }
 

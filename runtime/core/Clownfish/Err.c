@@ -209,7 +209,7 @@ Err_invalid_callback(const char *method_name) {
 #include <windows.h>
 
 char*
-Err_win_error() {
+Err_win_error(void) {
     DWORD buf_size = 256;
     char *buf = (char*)MALLOCATE(buf_size);
     DWORD message_len = FormatMessage(FORMAT_MESSAGE_FROM_SYSTEM,
