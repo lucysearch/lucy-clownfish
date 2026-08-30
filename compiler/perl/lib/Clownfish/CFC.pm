@@ -17,16 +17,16 @@ use strict;
 use warnings;
 
 package Clownfish::CFC;
-our $VERSION = '0.007000';
+our $VERSION = '0.008000';
 $VERSION = eval $VERSION;
-our $MAJOR_VERSION = 0.007000;
+our $MAJOR_VERSION = 0.008000;
 
 END {
     Clownfish::CFC::Model::Parcel->reap_singletons();
 }
 
 use XSLoader;
-BEGIN { XSLoader::load( 'Clownfish::CFC', '0.7.0' ) }
+BEGIN { XSLoader::load( 'Clownfish::CFC', '0.8.0' ) }
 
 {
     package Clownfish::CFC::Util;
