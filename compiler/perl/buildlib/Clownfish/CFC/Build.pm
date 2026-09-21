@@ -287,6 +287,7 @@ sub ACTION_dist {
         '../../LICENSE'          => 'LICENSE',
         '../../NOTICE'           => 'NOTICE',
         '../../README.md'        => 'README.md',
+        '../../SECURITY.md'      => 'SECURITY.md',
         '../../lemon'            => 'lemon',
         '../src'                 => 'src',
         '../include'             => 'include',
