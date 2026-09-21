@@ -342,6 +342,7 @@ sub ACTION_dist {
         '../../LICENSE'         => 'LICENSE',
         '../../NOTICE'          => 'NOTICE',
         '../../README.md'       => 'README.md',
+        '../../SECURITY.md'     => 'SECURITY.md',
         $CORE_SOURCE_DIR        => 'cfcore',
         $TEST_SOURCE_DIR        => 'cftest',
         $CHARMONIZER_C          => 'charmonizer.c',
